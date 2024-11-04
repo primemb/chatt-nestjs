@@ -1,16 +1,19 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { ChatModule } from './chat/chat.module';
 import { ConfigModule } from '@nestjs/config';
+import { PrismaModule } from '@app/libs';
+import { RabbitmqModule } from './rabbitmq/rabbitmq.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: ['apps/chat-app/.env'],
     }),
+    PrismaModule,
+    ChatModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
