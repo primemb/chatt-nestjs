@@ -11,9 +11,9 @@ RUN npm install
 COPY apps/websocket apps/websocket
 COPY libs libs
 
-RUN cd apps/websocket && npm run install
+RUN cd apps/websocket && npm install
 
-RUN npm run build
+RUN npm run build websocket
 
 FROM node:lts AS production
 

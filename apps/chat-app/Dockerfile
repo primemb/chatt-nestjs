@@ -13,7 +13,7 @@ COPY libs libs
 
 RUN cd apps/chat-app && npm install
 
-RUN npm run build
+RUN npm run build chat-app
 
 
 FROM node:lts AS production
