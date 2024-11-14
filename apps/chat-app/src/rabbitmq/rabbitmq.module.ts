@@ -8,16 +8,18 @@ import { CHAT_QUEUE, CHAT_SERVICE } from '@app/libs/constants';
     ClientsModule.registerAsync([
       {
         name: CHAT_SERVICE,
-        useFactory: async (configService: ConfigService) => ({
-          transport: Transport.RMQ,
-          options: {
-            url: [configService.get('RABBITMQ_URL')],
-            queue: CHAT_QUEUE,
-            queueOptions: {
-              durable: true,
+        useFactory: async (configService: ConfigService) => {
+          return {
+            transport: Transport.RMQ,
+            options: {
+              urls: [configService.get<string>('RABBITMQ_URL')],
+              queue: CHAT_QUEUE,
+              queueOptions: {
+                durable: true,
+              },
             },
-          },
-        }),
+          };
+        },
         inject: [ConfigService],
       },
     ]),

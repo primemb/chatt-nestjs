@@ -1,0 +1,89 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: ./apps/chat-app/Dockerfile
+      target: development
+    command: npm run start:dev chat-app
+
+    volumes:
+      - ./libs:/usr/src/app/libs
+      - ./apps/chat-app:/usr/src/app/apps/chat-app
+      - /usr/src/app/node_modules
+    env_file:
+      - apps/chat-app/.env.development
+    ports:
+      - 3000:3000
+    depends_on:
+      - mongodb-primary
+      - mongodb-secondary
+      - mongodb-arbiter
+      - rabbitmq
+
+  websocket:
+    build:
+      context: .
+      dockerfile: ./apps/chat-app/Dockerfile
+      target: development
+    command: npm run start:dev websocket
+
+    volumes:
+      - ./libs:/usr/src/app/libs
+      - ./apps/websocket:/usr/src/app/apps/websocket
+      - /usr/src/app/node_modules
+    env_file:
+      - apps/websocket/.env.development
+    ports:
+      - 3001:3001
+    depends_on:
+      - mongodb-primary
+      - mongodb-secondary
+      - mongodb-arbiter
+      - rabbitmq
+
+  mongodb-primary:
+    image: docker.io/bitnami/mongodb:7.0
+    environment:
+      - MONGODB_ADVERTISED_HOSTNAME=mongodb-primary
+      - MONGODB_REPLICA_SET_MODE=primary
+      - MONGODB_ROOT_PASSWORD=password123
+      - MONGODB_REPLICA_SET_KEY=replicasetkey123
+    ports:
+      - '27017:27017'
+    volumes:
+      - 'mongodb_master_data:/bitnami/mongodb'
+
+  mongodb-secondary:
+    image: docker.io/bitnami/mongodb:7.0
+    depends_on:
+      - mongodb-primary
+    environment:
+      - MONGODB_ADVERTISED_HOSTNAME=mongodb-secondary
+      - MONGODB_REPLICA_SET_MODE=secondary
+      - MONGODB_INITIAL_PRIMARY_HOST=mongodb-primary
+      - MONGODB_INITIAL_PRIMARY_ROOT_PASSWORD=password123
+      - MONGODB_REPLICA_SET_KEY=replicasetkey123
+
+  mongodb-arbiter:
+    image: docker.io/bitnami/mongodb:7.0
+    depends_on:
+      - mongodb-primary
+    environment:
+      - MONGODB_ADVERTISED_HOSTNAME=mongodb-arbiter
+      - MONGODB_REPLICA_SET_MODE=arbiter
+      - MONGODB_INITIAL_PRIMARY_HOST=mongodb-primary
+      - MONGODB_INITIAL_PRIMARY_ROOT_PASSWORD=password123
+      - MONGODB_REPLICA_SET_KEY=replicasetkey123
+
+  rabbitmq:
+    image: 'rabbitmq:3-management'
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+    volumes:
+      - 'rabbitmq_data:/data'
+
+volumes:
+  rabbitmq_data:
+  mongodb_master_data:
+    driver: local

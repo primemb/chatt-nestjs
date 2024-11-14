@@ -8,7 +8,7 @@ import { ChatModule } from './chat-gateway/chat.module';
     ChatModule,
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: ['apps/websocket/.env'],
+      envFilePath: ['apps/websocket/.env.development'],
     }),
     ConsumerModule,
   ],
