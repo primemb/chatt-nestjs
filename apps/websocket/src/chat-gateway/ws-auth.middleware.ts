@@ -1,3 +1,4 @@
+import { REQUEST_USER_KEY } from '@app/libs/auth-check/auth-check.constants';
 import { AuthCheckService } from '@app/libs/auth-check/auth-check.service';
 import { TokenPayload } from '@app/libs/auth-check/interface/token-payload.interface';
 import { Socket } from 'socket.io';
@@ -28,7 +29,7 @@ export const WSAuthMiddleware = (
       const payload = (await authCheckService.verifyToken(
         token,
       )) as TokenPayload;
-      client.user = payload;
+      client[REQUEST_USER_KEY] = payload;
       next();
     } catch (error) {
       next({

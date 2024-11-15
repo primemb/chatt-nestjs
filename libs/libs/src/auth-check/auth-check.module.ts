@@ -1,9 +1,8 @@
 import { Module } from '@nestjs/common';
 import { AuthCheckService } from './auth-check.service';
 import { JwtModule } from '@nestjs/jwt';
-import { join, resolve } from 'path';
-import * as fs from 'fs';
 import { publicKey } from './keys/publickey';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
 @Module({
   imports: [
@@ -18,7 +17,7 @@ import { publicKey } from './keys/publickey';
       },
     }),
   ],
-  providers: [AuthCheckService],
-  exports: [AuthCheckService],
+  providers: [AuthCheckService, JwtAuthGuard],
+  exports: [AuthCheckService, JwtAuthGuard],
 })
 export class AuthCheckModule {}

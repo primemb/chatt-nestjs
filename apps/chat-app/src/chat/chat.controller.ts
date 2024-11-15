@@ -6,18 +6,26 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { ChatService } from './chat.service';
 import { CreateChatDto } from './dto/create-chat.dto';
 import { UpdateChatDto } from './dto/update-chat.dto';
+import { JwtAuthGuard } from '@app/libs/auth-check/guards/jwt-auth.guard';
+import { CurrentUser } from '@app/libs/auth-check/decorators/current-user.decorator';
+import { TokenPayload } from '@app/libs/auth-check/interface/token-payload.interface';
 
 @Controller('chat')
 export class ChatController {
   constructor(private readonly chatService: ChatService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Post()
-  create(@Body() createChatDto: CreateChatDto) {
-    return this.chatService.createMessage(createChatDto);
+  create(
+    @Body() createChatDto: CreateChatDto,
+    @CurrentUser() user: TokenPayload,
+  ) {
+    return this.chatService.createMessage(createChatDto, user);
   }
 
   @Get()

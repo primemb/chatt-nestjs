@@ -5,9 +5,11 @@ import { RabbitmqModule } from '../rabbitmq/rabbitmq.module';
 import { DatabaseModule } from '@app/libs/database/database.module';
 import { Chat, ChatSchema } from './entities/chat.entity';
 import { ChatsRepository } from './chat.repository';
+import { AuthCheckModule } from '@app/libs/auth-check/auth-check.module';
 
 @Module({
   imports: [
+    AuthCheckModule,
     RabbitmqModule,
     DatabaseModule.forFeature([
       {

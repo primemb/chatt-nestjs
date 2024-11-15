@@ -1,14 +1,10 @@
-import {
-  OnGatewayConnection,
-  OnGatewayDisconnect,
-  WebSocketGateway,
-  WebSocketServer,
-} from '@nestjs/websockets';
+import { WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { TokenPayload } from '@app/libs/auth-check/interface/token-payload.interface';
 import { NestGateway } from '@nestjs/websockets/interfaces/nest-gateway.interface';
 import { AuthCheckService } from '@app/libs/auth-check/auth-check.service';
 import { WSAuthMiddleware } from './ws-auth.middleware';
+import { REQUEST_USER_KEY } from '@app/libs/auth-check/auth-check.constants';
 
 @WebSocketGateway({
   cors: {
@@ -28,15 +24,13 @@ export class ChatGateway implements NestGateway {
   }
 
   handleConnection(client: Socket) {
-    const user = client['user'];
+    const user = client[REQUEST_USER_KEY] as TokenPayload;
     console.log(`User ${user.email} connected`);
-    // You can emit an event or perform actions with the user information
   }
 
   handleDisconnect(client: Socket) {
-    const user = client['user'] as TokenPayload;
-    //console.log(`User ${user.email} disconnected`);
-    // Handle disconnection logic
+    const user = client[REQUEST_USER_KEY] as TokenPayload;
+    console.log(`User ${user.email} disconnected`);
   }
 
   sendMessage(message: any) {

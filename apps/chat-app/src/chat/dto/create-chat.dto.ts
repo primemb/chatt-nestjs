@@ -3,15 +3,12 @@ import {
   IsNotEmpty,
   IsOptional,
   IsDateString,
+  IsMongoId,
 } from 'class-validator';
 
 export class CreateChatDto {
   @IsString()
-  @IsNotEmpty()
-  sender: string;
-
-  @IsString()
-  @IsNotEmpty()
+  @IsMongoId()
   receiver: string;
 
   @IsString()

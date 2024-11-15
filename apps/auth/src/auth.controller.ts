@@ -1,9 +1,11 @@
-import { Body, Controller, Get, Post, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+
+import { CurrentUser } from '@app/libs/auth-check/decorators/current-user.decorator';
+import { CreateUserDto } from '@app/libs/users/dto/create-user.dto';
+import { User } from '@app/libs/users/entities/user.entity';
+
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
-import { CurrentUser } from './current-user.decorator';
-import { User } from '@app/libs/users/entities/user.entity';
-import { CreateUserDto } from '@app/libs/users/dto/create-user.dto';
 
 @Controller()
 export class AuthController {

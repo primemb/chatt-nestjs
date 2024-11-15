@@ -4,12 +4,11 @@ import { AuthService } from './auth.service';
 import { HashingService } from './hashing/hashing.service';
 import { BcryptService } from './hashing/bcrypt.service';
 import { JwtModule } from '@nestjs/jwt';
-import * as fs from 'fs';
-import { join, resolve } from 'path';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UsersModule } from '@app/libs/users/users.module';
 import { DatabaseModule } from '@app/libs/database/database.module';
 import { LocalStrategy } from './strategies/local.strategy';
+import { privateKey } from '@app/libs/auth-check/keys/privatekey';
 
 @Module({
   imports: [
@@ -19,18 +18,7 @@ import { LocalStrategy } from './strategies/local.strategy';
     }),
     JwtModule.registerAsync({
       useFactory: (configService: ConfigService) => ({
-        privateKey: fs.readFileSync(
-          join(
-            resolve(),
-            'libs',
-            'libs',
-            'src',
-            'auth-check',
-            'keys',
-            'private.key',
-          ),
-          'utf8',
-        ),
+        privateKey: privateKey,
         signOptions: {
           algorithm: 'RS256',
           expiresIn: configService.get('JWT_EXPIRATION'),

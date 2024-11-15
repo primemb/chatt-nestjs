@@ -5,6 +5,7 @@ import { CHAT_SERVICE } from '@app/libs/constants';
 import { ClientProxy } from '@nestjs/microservices';
 import { ChatsRepository } from './chat.repository';
 import { ConfigService } from '@nestjs/config';
+import { TokenPayload } from '@app/libs/auth-check/interface/token-payload.interface';
 
 @Injectable()
 export class ChatService {
@@ -14,8 +15,11 @@ export class ChatService {
     private readonly configService: ConfigService,
   ) {}
 
-  async createMessage(data: CreateChatDto) {
-    const chat = await this.chatsRepository.create({ ...data });
+  async createMessage(data: CreateChatDto, user: TokenPayload) {
+    const chat = await this.chatsRepository.create({
+      ...data,
+      sender: user.sub,
+    });
 
     console.log(this.configService.get('RABBITMQ_URL'));
     await this.client.connect();
