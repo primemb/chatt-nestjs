@@ -7,10 +7,9 @@ import { HashingService } from './hashing/hashing.service';
 import { UsersService } from '@app/libs/users/users.service';
 import { CreateUserDto } from '@app/libs/users/dto/create-user.dto';
 import { User } from '@app/libs/users/entities/user.entity';
-import { Response } from 'express';
 import { ConfigService } from '@nestjs/config';
-import { TokenPayload } from './interface/token-payload.interface';
 import { JwtService } from '@nestjs/jwt';
+import { TokenPayload } from '@app/libs/auth-check/interface/token-payload.interface';
 
 @Injectable()
 export class AuthService {

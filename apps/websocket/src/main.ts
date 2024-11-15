@@ -9,18 +9,18 @@ async function bootstrap() {
 
   const configService = app.get(ConfigService);
 
-  app.connectMicroservice<MicroserviceOptions>({
-    transport: Transport.RMQ,
-    options: {
-      urls: [configService.get<string>('RABBITMQ_URL')],
-      queue: CHAT_QUEUE,
-      queueOptions: {
-        durable: true,
-      },
-    },
-  });
+  // app.connectMicroservice<MicroserviceOptions>({
+  //   transport: Transport.RMQ,
+  //   options: {
+  //     urls: [configService.get<string>('RABBITMQ_URL')],
+  //     queue: CHAT_QUEUE,
+  //     queueOptions: {
+  //       durable: true,
+  //     },
+  //   },
+  // });
 
-  await app.startAllMicroservices();
+  // await app.startAllMicroservices();
   await app.listen(configService.get<number>('PORT'));
 
   console.log(`Gateway is running on: ${await app.getUrl()}`);

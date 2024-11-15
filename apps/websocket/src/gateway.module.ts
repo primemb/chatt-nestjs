@@ -12,5 +12,6 @@ import { ChatModule } from './chat-gateway/chat.module';
     }),
     ConsumerModule,
   ],
+  providers: [],
 })
 export class GatewayModule {}
