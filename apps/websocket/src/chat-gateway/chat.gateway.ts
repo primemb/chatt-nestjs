@@ -26,6 +26,8 @@ export class ChatGateway implements NestGateway {
   handleConnection(client: Socket) {
     const user = client[REQUEST_USER_KEY] as TokenPayload;
     console.log(`User ${user.email} connected`);
+
+    client.join(user.sub);
   }
 
   handleDisconnect(client: Socket) {
@@ -34,6 +36,7 @@ export class ChatGateway implements NestGateway {
   }
 
   sendMessage(message: any) {
-    this.server.emit('chat_created', message);
+    const receiverId = message.receiver;
+    this.server.to(receiverId).emit('chat_created', message);
   }
 }
