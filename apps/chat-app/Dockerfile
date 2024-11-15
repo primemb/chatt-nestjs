@@ -11,8 +11,6 @@ RUN npm install
 COPY apps/chat-app apps/chat-app
 COPY libs libs
 
-RUN cd apps/chat-app && npm install
-
 RUN npm run build chat-app
 
 

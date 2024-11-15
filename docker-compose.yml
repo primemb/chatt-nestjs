@@ -10,7 +10,6 @@ services:
       - ./libs:/usr/src/app/libs
       - ./apps/chat-app:/usr/src/app/apps/chat-app
       - /usr/src/app/node_modules
-      - /usr/src/app/apps/chat-app/node_modules
 
     env_file:
       - apps/chat-app/.env.development
@@ -33,7 +32,6 @@ services:
       - ./libs:/usr/src/app/libs
       - ./apps/websocket:/usr/src/app/apps/websocket
       - /usr/src/app/node_modules
-      - /usr/src/app/apps/websocket/node_modules
     env_file:
       - apps/websocket/.env.development
     ports:
@@ -55,7 +53,6 @@ services:
       - ./libs:/usr/src/app/libs
       - ./apps/auth:/usr/src/app/apps/auth
       - /usr/src/app/node_modules
-      - /usr/src/app/apps/auth/node_modules
     env_file:
       - apps/auth/.env.development
     ports:
